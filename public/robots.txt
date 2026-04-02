@@ -1,0 +1,12 @@
+# Robots.txt para Advance Precatórios
+# https://www.advanceprecatorios.com.br
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.advanceprecatorios.com.br/sitemap.xml
+
+# Páginas administrativas (se houver)
+Disallow: /admin/
+Disallow: /cgi-bin/
