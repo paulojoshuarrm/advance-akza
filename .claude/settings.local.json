@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(find /c/Users/probr/Documents/advance-page-react -not -path */node_modules/* -type f)",
+      "Bash(curl -s -o \"C:/Users/probr/Documents/advance-page-react/public/assets/cubes-pattern.png\" \"https://www.transparenttextures.com/patterns/cubes.png\")",
+      "Bash(xargs sed:*)",
+      "Bash(npm run:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(pip install:*)",
+      "Bash(python -c \":*)",
+      "Bash(python:*)",
+      "Bash(grep -v \"^id=\"\"$\")",
+      "Bash(cat:*)",
+      "Bash(npm list:*)",
+      "Bash(npm install:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(ls -la /c/Users/probr/Documents/advance-page-react/dist/assets/*.webp)",
+      "Bash(ls -la /c/Users/probr/Documents/advance-page-react/dist/assets/*.js)",
+      "Bash(ls -la /c/Users/probr/Documents/advance-page-react/dist/assets/*.css)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
