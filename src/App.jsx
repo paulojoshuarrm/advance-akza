@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingActions from './components/FloatingActions';
@@ -19,9 +19,20 @@ const FAQ = lazy(() => import('./pages/FAQ'));
 const PoliticaDePrivacidade = lazy(() => import('./pages/PoliticaDePrivacidade'));
 const TermosDeUso = lazy(() => import('./pages/TermosDeUso'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 function AppContent() {
     useScrollToHash();
+    const location = useLocation();
+    const isAdmin = location.pathname === '/admin';
+
+    if (isAdmin) {
+        return (
+            <Suspense fallback={<LoadingScreen />}>
+                <Admin />
+            </Suspense>
+        );
+    }
 
     return (
         <div className="bg-slate-50 text-slate-600 font-sans antialiased selection:bg-primary selection:text-white">
@@ -42,6 +53,7 @@ function AppContent() {
                             <Route path="/faq" element={<FAQ />} />
                             <Route path="/politica-de-privacidade" element={<PoliticaDePrivacidade />} />
                             <Route path="/termos-de-uso" element={<TermosDeUso />} />
+                            <Route path="/admin" element={<Admin />} />
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Suspense>

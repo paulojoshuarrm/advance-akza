@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import useRevealAnimation from '../hooks/useRevealAnimation';
 import SEO from '../components/SEO';
+import { supabase } from '../lib/supabase';
 
 export default function Simulacao() {
   useRevealAnimation();
@@ -127,13 +128,32 @@ export default function Simulacao() {
 
     setResultState('loading');
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const valorLiquido = valorNumerico * fatorDesagio;
+      const valorFaceFormatado = valorNumerico.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const valorLiquidoFormatado = valorLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-      setDisplayValorFace(valorNumerico.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-      setDisplayValorLiquido(valorLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-
+      setDisplayValorFace(valorFaceFormatado);
+      setDisplayValorLiquido(valorLiquidoFormatado);
       setResultState('final');
+
+      // Salva lead no Supabase
+      const lead = {
+        origem: 'simulacao',
+        nome: document.getElementById('nome')?.value || '',
+        cpf_cnpj: document.getElementById('cpf')?.value || '',
+        nascimento: document.getElementById('nascimento')?.value || '',
+        telefone: document.getElementById('telefone')?.value || '',
+        email: document.getElementById('email')?.value || '',
+        estado: document.getElementById('estado')?.value || '',
+        cidade: document.getElementById('cidade')?.value || '',
+        ente_devedor: document.getElementById('enteDevedor')?.value || '',
+        natureza: document.getElementById('natureza')?.value || '',
+        valor_face: valorFaceFormatado,
+        valor_estimado: valorLiquidoFormatado,
+      };
+
+      await supabase.from('leads').insert(lead);
     }, 2000);
   }, []);
 

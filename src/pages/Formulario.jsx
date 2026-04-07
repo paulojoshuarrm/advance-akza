@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useRevealAnimation from '../hooks/useRevealAnimation';
 import SEO from '../components/SEO';
 import { Icon } from '@iconify/react';
+import { supabase } from '../lib/supabase';
 
 export default function Formulario() {
   useRevealAnimation();
@@ -10,6 +11,7 @@ export default function Formulario() {
   const [currentStep, setCurrentStep] = useState(1);
   const [displayValorFace, setDisplayValorFace] = useState('R$ 0,00');
   const [displayValorLiquido, setDisplayValorLiquido] = useState('R$ 0,00');
+  const [submitState, setSubmitState] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
 
   const formatarMoeda = useCallback((elemento) => {
     let valor = elemento.value.replace(/\D/g, "");
@@ -109,6 +111,41 @@ export default function Formulario() {
     setCurrentStep(2);
   }, []);
 
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    setSubmitState('loading');
+
+    const getValue = (id) => document.getElementById(id)?.value || '';
+    const getInputByPlaceholder = (placeholder) => {
+      const el = document.querySelector(`input[placeholder="${placeholder}"]`);
+      return el?.value || '';
+    };
+
+    const lead = {
+      origem: 'formulario',
+      nome: getInputByPlaceholder('Digite seu nome completo'),
+      cpf_cnpj: getInputByPlaceholder('000.000.000-00 ou CNPJ'),
+      telefone: getInputByPlaceholder('(00) 00000-0000'),
+      email: getInputByPlaceholder('seu@email.com'),
+      ente_devedor: getValue('enteDevedor'),
+      natureza: getValue('natureza'),
+      valor_face: getValue('valorFace'),
+      ano_expedicao: document.querySelector('input[placeholder="Ex: 2022"]')?.value || '',
+      numero_processo: document.querySelector('input[placeholder="Ex: 0000000-00.0000.0.00.0000"]')?.value || '',
+      observacoes: document.querySelector('textarea')?.value || '',
+      valor_estimado: displayValorLiquido,
+    };
+
+    const { error } = await supabase.from('leads').insert(lead);
+
+    if (error) {
+      console.error('Erro ao enviar lead:', error);
+      setSubmitState('error');
+    } else {
+      setSubmitState('success');
+    }
+  }, [displayValorLiquido]);
+
   return (
     <>
       <SEO
@@ -192,7 +229,7 @@ export default function Formulario() {
                   <Icon icon="mdi:scale-balance" className="text-3xl text-primary/50" />
                 </div>
 
-                <form className="space-y-8">
+                <form className="space-y-8" onSubmit={handleSubmit}>
                   {/* Seção 1: Dados Pessoais */}
                   <div id="step1" className={`transition-opacity duration-300${currentStep !== 1 ? ' hidden' : ''}`}>
                     <h4 className="text-white/80 font-display text-sm uppercase tracking-widest mb-4 border-b border-white/10 pb-2 flex items-center gap-2">
@@ -333,15 +370,29 @@ export default function Formulario() {
                     </div>
 
                     {/* Botões Ação */}
-                    <div className="flex gap-4 mt-8">
-                      <button type="button" onClick={backToStep2} className="w-auto border border-white/10 text-slate-300 font-bold p-4 uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm flex items-center justify-center gap-2">
-                        <span className="iconify text-xl" data-icon="mdi:arrow-left"></span> Voltar
-                      </button>
-                      <button type="submit" className="flex-grow btn-glow bg-primary text-navy-900 font-bold py-4 uppercase tracking-widest hover:bg-white transition-all rounded-sm flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(197,160,89,0.3)]">
-                        Solicitar Proposta
-                        <span className="iconify text-xl group-hover:translate-x-1 transition-transform" data-icon="mdi:check-circle-outline"></span>
-                      </button>
-                    </div>
+                    {submitState === 'success' ? (
+                      <div className="mt-8 bg-green-500/10 border border-green-500/30 rounded-lg p-6 text-center">
+                        <Icon icon="mdi:check-circle" className="text-4xl text-green-400 mx-auto mb-3" />
+                        <h4 className="text-white font-bold text-lg mb-1">Solicitação enviada!</h4>
+                        <p className="text-slate-400 text-sm">Nossa equipe entrará em contato em até 24 horas.</p>
+                      </div>
+                    ) : (
+                      <div className="flex gap-4 mt-8">
+                        <button type="button" onClick={backToStep2} disabled={submitState === 'loading'} className="w-auto border border-white/10 text-slate-300 font-bold p-4 uppercase tracking-widest hover:bg-white/5 transition-all rounded-sm flex items-center justify-center gap-2 disabled:opacity-50">
+                          <span className="iconify text-xl" data-icon="mdi:arrow-left"></span> Voltar
+                        </button>
+                        <button type="submit" disabled={submitState === 'loading'} className="flex-grow btn-glow bg-primary text-navy-900 font-bold py-4 uppercase tracking-widest hover:bg-white transition-all rounded-sm flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(197,160,89,0.3)] disabled:opacity-70">
+                          {submitState === 'loading' ? (
+                            <><Icon icon="mdi:loading" className="text-xl animate-spin" /> Enviando...</>
+                          ) : (
+                            <>Solicitar Proposta <span className="iconify text-xl group-hover:translate-x-1 transition-transform" data-icon="mdi:check-circle-outline"></span></>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                    {submitState === 'error' && (
+                      <p className="text-red-400 text-sm text-center mt-2">Erro ao enviar. Tente novamente ou entre em contato por WhatsApp.</p>
+                    )}
                   </div>
                 </form>
               </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import SEO from '../components/SEO';
 import useRevealAnimation from '../hooks/useRevealAnimation';
+import { supabase } from '../lib/supabase';
 
 export default function Home() {
     useRevealAnimation();
@@ -157,9 +158,29 @@ export default function Home() {
         e.target.value = valor;
     };
 
-    const handleLeadSubmit = (e) => {
+    const [leadSubmitState, setLeadSubmitState] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+
+    const handleLeadSubmit = async (e) => {
         e.preventDefault();
-        alert('Solicitação enviada! Nossa equipe entrará em contato.');
+        setLeadSubmitState('loading');
+
+        const form = e.target;
+        const inputs = form.querySelectorAll('input');
+        const lead = {
+            origem: 'home',
+            nome: inputs[0]?.value || '',
+            telefone: inputs[1]?.value || '',
+            email: inputs[2]?.value || '',
+            valor_face: inputs[3]?.value || '',
+        };
+
+        const { error } = await supabase.from('leads').insert(lead);
+        if (error) {
+            setLeadSubmitState('error');
+        } else {
+            setLeadSubmitState('success');
+            form.reset();
+        }
     };
 
     return (
@@ -880,9 +901,24 @@ export default function Home() {
                                         <input type="text" className="w-full bg-white border border-slate-200 rounded px-4 py-3 text-navy-900 placeholder-slate-600 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="R$ 0,00" onKeyUp={formatarMoeda} />
                                     </div>
 
-                                    <button type="submit" className="w-full btn-glow bg-primary text-navy-900 font-bold py-4 rounded uppercase tracking-widest hover:bg-white transition-all shadow-lg mt-4 group flex justify-center items-center gap-2">
-                                        Solicitar Proposta <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                                    </button>
+                                    {leadSubmitState === 'success' ? (
+                                        <div className="mt-4 bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
+                                            <Icon icon="mdi:check-circle" className="text-3xl text-green-400 mx-auto mb-1" />
+                                            <p className="text-white font-bold">Solicitação enviada!</p>
+                                            <p className="text-slate-400 text-sm">Nossa equipe entrará em contato em até 24 horas.</p>
+                                        </div>
+                                    ) : (
+                                        <button type="submit" disabled={leadSubmitState === 'loading'} className="w-full btn-glow bg-primary text-navy-900 font-bold py-4 rounded uppercase tracking-widest hover:bg-white transition-all shadow-lg mt-4 group flex justify-center items-center gap-2 disabled:opacity-70">
+                                            {leadSubmitState === 'loading' ? (
+                                                <><Icon icon="mdi:loading" className="animate-spin" /> Enviando...</>
+                                            ) : (
+                                                <>Solicitar Proposta <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span></>
+                                            )}
+                                        </button>
+                                    )}
+                                    {leadSubmitState === 'error' && (
+                                        <p className="text-red-400 text-xs text-center mt-2">Erro ao enviar. Tente por WhatsApp.</p>
+                                    )}
                                 </form>
                             </div>
                         </div>
