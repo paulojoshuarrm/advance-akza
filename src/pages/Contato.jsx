@@ -63,7 +63,7 @@ export default function Contato() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Phone */}
-            <a href="#" className="card-light group relative p-6 rounded-2xl reveal text-center block h-full flex flex-col justify-center items-center hover:-translate-y-2 transition-transform duration-300">
+            <a href="tel:+5561993807943" className="card-light group relative p-6 rounded-2xl reveal text-center block h-full flex flex-col justify-center items-center hover:-translate-y-2 transition-transform duration-300">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               <div className="relative w-20 h-20 mb-6 mx-auto shrink-0">
                 <div className="absolute inset-0 bg-primary/5 rounded-2xl rotate-12 group-hover:rotate-6 transition-transform duration-500 border border-primary/10"></div>
@@ -77,7 +77,7 @@ export default function Contato() {
             </a>
 
             {/* Email */}
-            <a href="#" className="card-light group relative p-6 rounded-2xl reveal text-center block h-full flex flex-col justify-center items-center hover:-translate-y-2 transition-transform duration-300" style={{ transitionDelay: '100ms' }}>
+            <a href="mailto:contato@advanceprecatorios.com.br" className="card-light group relative p-6 rounded-2xl reveal text-center block h-full flex flex-col justify-center items-center hover:-translate-y-2 transition-transform duration-300" style={{ transitionDelay: '100ms' }}>
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               <div className="relative w-20 h-20 mb-6 mx-auto shrink-0">
                 <div className="absolute inset-0 bg-primary/5 rounded-2xl rotate-12 group-hover:rotate-6 transition-transform duration-500 border border-primary/10"></div>

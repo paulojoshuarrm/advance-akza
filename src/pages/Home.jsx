@@ -418,7 +418,7 @@ export default function Home() {
                                 <div className="space-y-6">
                                     {[
                                         { icon: 'mdi:hand-coin-outline', title: 'Melhores Ofertas Garantidas', desc: 'Monitoramos o mercado diariamente para garantir que nossa proposta seja a mais competitiva e justa para o seu ativo.' },
-                                        { icon: 'mdi:rocket-launch-outline', title: 'Agilidade no Pagamento', desc: 'Sem filas ou burocracia desnecessária. Pagamento à vista no ato da assinatura da escritura pública.' },
+                                        { icon: 'mdi:rocket-launch-outline', title: 'Agilidade no Pagamento', desc: 'Sem filas ou burocracia desnecessária. Pagamento à vista no ato da assinatura da escritura pública. Pagamento após assinatura da cessão creditória em até 24 horas.' },
                                         { icon: 'mdi:shield-check-outline', title: 'Segurança Jurídica Total', desc: 'Processo auditado por equipe jurídica especializada, garantindo conformidade e tranquilidade para você.' },
                                         { icon: 'mdi:file-search-outline', title: 'Avaliação gratuita e sem compromisso', desc: 'Analisamos seu precatório e enviamos uma proposta de compra. Você decide com total tranquilidade: se não gostar da oferta, simplesmente não precisa aceitar.' },
                                     ].map((item, i) => (

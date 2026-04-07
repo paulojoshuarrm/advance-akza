@@ -164,7 +164,7 @@ export default function Sobre() {
                                 </div>
                                 <h3 className="text-2xl text-navy-900 font-display font-bold mb-4">Diego Dutra</h3>
                                 <p className="text-slate-500 text-sm font-light leading-relaxed">
-                                    Especialista em Direito Constitucional com mais de 15 anos de experiência em precatórios federais e estaduais.
+                                    Focado em análise de riscos e compliance, garantindo segurança total e transparência em cada negociação.
                                 </p>
                             </div>
                         </div>
@@ -182,7 +182,7 @@ export default function Sobre() {
                                 <h3 className="text-2xl text-navy-900 font-display font-bold mb-1">Dr. Italo Nóbrega</h3>
                                 <p className="text-primary text-xs font-bold uppercase tracking-widest mb-4">OAB/DF 24.925</p>
                                 <p className="text-slate-500 text-sm font-light leading-relaxed">
-                                    Focada em análise de riscos e compliance, garantindo segurança total e transparência em cada negociação.
+                                    Especialista em Direito Constitucional com mais de 15 anos de experiência em precatórios federais e estaduais.
                                 </p>
                             </div>
                         </div>
